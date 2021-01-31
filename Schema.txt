@@ -1,0 +1,63 @@
+
+********* Landing page
+
+Categories : {
+    name: String,
+}
+
+item : {
+    name: String,
+    price: Int,
+    city: String,
+    country: String,
+    descriptions: String,
+    imgId: [ { _id: objectId } ],
+    featureId: [ { _id: objectId } ],
+    activittId: [{_id: objectId}],
+    isPopular: Bool,
+}
+
+images {
+    imageURL: String
+}
+
+features {
+    name: String,
+    qty: Int
+}
+
+activities {
+    title: string,
+    type: string,
+    imgURL: string,
+    isPopular: boolean,
+}
+
+********* Booking
+
+booking : {
+    startDate: date,
+    endDate: date,
+    itemId: [{
+        _id: objectId,
+        price: string,
+        night: number,
+    }],
+    memberId: [{_id: objectId}]
+    proofPaymentImg: string,
+    bankAccount: string,
+    bankAccountHolder: string,
+}
+
+member : {
+    firstName: string,
+    lastName: string,
+    email: string,
+    phone: string,
+}
+
+banks : {
+    bankName: string,
+    accountNumber: string,
+    accountName: string,
+}
