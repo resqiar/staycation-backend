@@ -1,3 +1,6 @@
+//dot-env
+require('dotenv').config()
+
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -20,6 +23,9 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 // sb admin static res
 app.use('/sb-admin-2', express.static(path.join(__dirname, 'node_modules/startbootstrap-sb-admin-2')));
+
+// TODO: DATABASE CONNECTIONS
+require('./config/DBCon')
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);

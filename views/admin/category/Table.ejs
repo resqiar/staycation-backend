@@ -1,6 +1,47 @@
 <div class="card shadow mb-4">
     <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">List of Category</h6>
+        <div class="container">
+            <div class="row">
+                <div class="col-10">
+                    <h6 class="m-0 font-weight-bold text-primary">List of Category</h6>
+                </div>
+                <div class="col">
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
+                        data-target="#exampleModal">
+                        <i class="fas fa-plus-circle"></i> Add New
+                    </button>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+                        aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Add New Category</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="/admin/category" method="POST">
+                                        <div class="form-group">
+                                            <label for="name">Category Name:</label>
+                                            <input type="text" class="form-control" id="category__name" required
+                                                name="category__name">
+                                        </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary">Save changes</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="card-body">
         <div class="table-responsive">
@@ -12,7 +53,64 @@
                         <th>Action</th>
                     </tr>
                 </thead>
+                <tbody>
+                    <% for( let i = 0; i < categories.length; i++ ) { %>
+                    <tr>
+                        <td> <%= i + 1 %> </td>
+                        <td> <%= categories[i].name %> </td>
+                        <td>
+                            <button data-id="<%= categories[i].id %>" data-name="<%= categories[i].name %> "
+                                type="button" data-target="#editModal" data-toggle="modal"
+                                class="btn btn-info btn-circle btn-sm" id="btn-update" onclick="showAttr(this)"><i
+                                    class="fas fa-fw fa-edit"></i></button>
+
+                            <button type="button" class="btn btn-danger btn-sm btn-circle"><i
+                                    class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>
+                    <% } %>
+                </tbody>
             </table>
         </div>
     </div>
 </div>
+
+
+<!-- Edit Modal -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Edit Category</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="/admin/category/update" method="POST">
+                    <div class="form-group">
+                        <label for="name">Category Name:</label>
+                        <input type="text" class="form-control update-name" id="category__name" required
+                            name="category__name">
+                        <input type="hidden" class="update-id" name="category__id">
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Save changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function showAttr(v) { // pass data from attr => input value
+        const id = v.getAttribute('data-id')
+        const name = v.getAttribute('data-name')
+
+        const input = document.querySelector('.update-name').setAttribute('value', name)
+        const hidden = document.querySelector('.update-id').setAttribute('value', id)
+    }
+</script>
