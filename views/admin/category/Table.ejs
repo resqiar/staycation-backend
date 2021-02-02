@@ -1,15 +1,15 @@
 <div class="card shadow mb-4">
     <div class="card-header py-3">
-        <div class="container">
+        <div class="container-fluid">
             <div class="row">
                 <div class="col-10">
-                    <h6 class="m-0 font-weight-bold text-primary">List of Category</h6>
+                    <p class="m-0 font-weight-bold text-primary">List of Category</p>
                 </div>
                 <div class="col">
                     <!-- Button trigger modal -->
                     <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
                         data-target="#exampleModal">
-                        <i class="fas fa-plus-circle"></i> Add New
+                        <i class="fas fa-plus-circle"></i> Add new
                     </button>
 
                     <!-- Modal -->
@@ -61,10 +61,12 @@
                         <td>
                             <button data-id="<%= categories[i].id %>" data-name="<%= categories[i].name %> "
                                 type="button" data-target="#editModal" data-toggle="modal"
-                                class="btn btn-info btn-circle btn-sm" id="btn-update" onclick="showAttr(this)"><i
+                                class="btn btn-info btn-circle btn-sm" id="btn-update" onclick="showUpdateAttr(this)"><i
                                     class="fas fa-fw fa-edit"></i></button>
 
-                            <button type="button" class="btn btn-danger btn-sm btn-circle"><i
+                            <button data-id="<%= categories[i].id %>" data-name="<%= categories[i].name %> "
+                                type="button" data-target="#deleteModal" data-toggle="modal"
+                                class="btn btn-danger btn-sm btn-circle" onclick="showDeleteAttr(this)"><i
                                     class="fas fa-trash"></i></button>
                         </td>
                     </tr>
@@ -104,13 +106,47 @@
         </div>
     </div>
 </div>
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalCenterTitle">Are you sure want to <b class="text-danger">delete</b> this item?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="/admin/category/delete" method="POST">
+                    <div class="form-group">
+                        <input readonly type="text" class="form-control delete-name" id="category__name" required
+                            name="category__name">
+                        <input type="hidden" class="delete-id" name="category__id">
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn btn-light text-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <script>
-    function showAttr(v) { // pass data from attr => input value
+    function showUpdateAttr(v) { // pass data from attr => input value
         const id = v.getAttribute('data-id')
         const name = v.getAttribute('data-name')
 
         const input = document.querySelector('.update-name').setAttribute('value', name)
         const hidden = document.querySelector('.update-id').setAttribute('value', id)
+    }
+    function showDeleteAttr(v) { // pass data from attr => input value
+        const id = v.getAttribute('data-id')
+        const name = v.getAttribute('data-name')
+
+        const input = document.querySelector('.delete-name').setAttribute('value', name)
+        const hidden = document.querySelector('.delete-id').setAttribute('value', id)
     }
 </script>

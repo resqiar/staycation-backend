@@ -49,7 +49,7 @@ module.exports = {
     updateCategory: async (req, res) => {
         const id = req.body.category__id
         const input = req.body.category__name
-        
+
         if (id === null || input === null) return;
 
         await Category.findByIdAndUpdate(id, {
@@ -63,4 +63,23 @@ module.exports = {
             res.redirect('/admin/category')
         })
     }
+    ,
+
+
+    // TODO: POST => DELETE => DATABASE
+    deleteCategory: async (req, res) => {
+        const id = req.body.category__id
+        const input = req.body.category__name
+
+        if (id === null || input === null) return;
+
+        await Category.findByIdAndDelete(id).then(() => {
+            // redirect
+            res.status(201).redirect('/admin/category')
+        }).catch((e) => {
+            // redirect
+            console.log(e);
+            res.redirect('/admin/category')
+        })
+    },
 }

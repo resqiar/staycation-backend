@@ -18,4 +18,7 @@ router.post('/category', adminController.postCategory)
 // UPDATING data
 router.post('/category/update', adminController.updateCategory)
 
+// DELETING data
+router.post('/category/delete', adminController.deleteCategory)
+
 module.exports = router
