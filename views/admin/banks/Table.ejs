@@ -1,6 +1,56 @@
 <div class="card shadow mb-4">
     <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">List of Banks</h6>
+        <div class="row">
+            <div class="col-10">
+                <h6 class="m-0 font-weight-bold text-primary">List of Banks</h6>
+            </div>
+            <div class="col">
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModal">
+                    <i class="fas fa-plus-circle"></i> Add new
+                </button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Add New Bank</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="/admin/banks" method="POST">
+                                    <div class="form-group">
+                                        <label for="name">Bank:</label>
+                                        <input type="text" class="form-control" id="banks__bank" required
+                                            name="banks_bank" placeholder="e.g: CIMB NIAGA" autocomplete="off">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="name">Bank Account Name:</label>
+                                        <input type="text" class="form-control" id="banks__accountName"
+                                            placeholder="e.g: a/n Sultan Rahadi" required name="banks_accountName"
+                                            autocomplete="off">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="name">Bank Account Number</label>
+                                        <input type="text" class="form-control" id="banks_accountNumber"
+                                            placeholder="e.g: 0881-8829-xxxx" required name="banks_accountNumber"
+                                            autocomplete="off">
+                                    </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Save changes</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="card-body">
         <div class="table-responsive">
@@ -14,7 +64,133 @@
                         <th>Action</th>
                     </tr>
                 </thead>
+                <tbody>
+                    <% for( let i = 0; i < banks.length; i++ ) { %>
+                    <td> <%= i + 1 %> </td>
+                    <td> <%= banks[i].bankName %> </td>
+                    <td> <%= banks[i].accountName %> </td>
+                    <td> <%= banks[i].accountNumber %> </td>
+                    <td>
+                        <button data-id="<%= banks[i].id %>" data-bank="<%= banks[i].bankName %> "
+                            data-accountNumber="<%= banks[i].accountNumber %> "
+                            data-accountName="<%= banks[i].accountName%>" type="button" data-target="#editModal"
+                            data-toggle="modal" class="btn btn-info btn-circle btn-sm" id="btn-update"
+                            onclick="showUpdateAttr(this)"><i class="fas fa-fw fa-edit"></i></button>
+
+                        <button data-id="<%= banks[i].id %>" data-bank="<%= banks[i].bankName %> "
+                            data-accountNumber="<%= banks[i].accountNumber %> "
+                            data-accountName="<%= banks[i].accountName%>" type="button" data-target="#deleteModal"
+                            data-toggle="modal" class="btn btn-danger btn-sm btn-circle"
+                            onclick="showDeleteAttr(this)"><i class="fas fa-trash"></i></button>
+                    </td>
+                    <% } %>
+                </tbody>
             </table>
         </div>
     </div>
 </div>
+
+
+<!-- Edit Modal -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Edit Banks</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="/admin/banks/update" method="POST">
+                    <div class="form-group">
+                        <label for="name">Bank:</label>
+                        <input type="text" class="form-control bankName" id="banks__bank" required name="banks_bank"
+                            placeholder="e.g: CIMB NIAGA" autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <label for="name">Bank Account Name:</label>
+                        <input type="text" class="form-control accountName" id="banks__accountName"
+                            placeholder="e.g: a/n Sultan Rahadi" required name="banks_accountName" autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <label for="name">Bank Account Number</label>
+                        <input type="text" class="form-control accountNumber" id="banks_accountNumber"
+                            placeholder="e.g: 0881-8829-xxxx" required name="banks_accountNumber" autocomplete="off">
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <input type="hidden" name="banks_id" class="banksId" value="">
+                <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Save changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalCenterTitle">Are you sure want to <b
+                        class="text-danger">delete</b> this item?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="/admin/banks/delete" method="POST">
+                    <div class="form-group">
+                        <label for="name">Bank:</label>
+                        <input readonly type="text" class="form-control delete-bank" id="banks__bank" required
+                            name="banks_bank" autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <label for="name">Bank Account Name:</label>
+                        <input readonly type="text" class="form-control delete-accountName" id="banks__accountName"
+                            required name="banks_accountName" autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <label for="name">Bank Account Number</label>
+                        <input readonly type="text" class="form-control delete-accountNumber" id="banks_accountNumber"
+                            required name="banks_accountNumber" autocomplete="off">
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn btn-light text-danger">Delete</button>
+                <input type="hidden" name="banks_id" class="delete-id">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    function showUpdateAttr(v) { // pass data from attr => input value
+        const id = v.getAttribute('data-id')
+        const bankName = v.getAttribute('data-bank')
+        const accountName = v.getAttribute('data-accountName')
+        const accountNumber = v.getAttribute('data-accountNumber')
+
+        const inputBank = document.querySelector('.bankName').setAttribute('value', bankName)
+        const inputAccountName = document.querySelector('.accountName').setAttribute('value', accountName)
+        const inputAccountNumber = document.querySelector('.accountNumber').setAttribute('value', accountNumber)
+        const hidden = document.querySelector('.banksId').setAttribute('value', id)
+    }
+
+    function showDeleteAttr(v) { // pass data from attr => input value
+        const id = v.getAttribute('data-id')
+        const bankName = v.getAttribute('data-bank')
+        const accountName = v.getAttribute('data-accountName')
+        const accountNumber = v.getAttribute('data-accountNumber')
+
+        const inputBank = document.querySelector('.delete-bank').setAttribute('value', bankName)
+        const inputAccountName = document.querySelector('.delete-accountName').setAttribute('value', accountName)
+        const inputAccountNumber = document.querySelector('.delete-accountNumber').setAttribute('value', accountNumber)
+        const hidden = document.querySelector('.delete-id').setAttribute('value', id)
+    }
+</script>
