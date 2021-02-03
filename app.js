@@ -23,6 +23,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 // sb admin static res
 app.use('/sb-admin-2', express.static(path.join(__dirname, 'node_modules/startbootstrap-sb-admin-2')));
+app.use('/ckeditor4', express.static(path.join(__dirname, 'node_modules/ckeditor4')))
 
 // TODO: DATABASE CONNECTIONS
 require('./config/DBCon')

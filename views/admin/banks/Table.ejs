@@ -22,7 +22,7 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <form action="/admin/banks" method="POST">
+                                <form action="/admin/banks" method="POST" enctype="multipart/form-data">
                                     <div class="form-group">
                                         <label for="name">Bank:</label>
                                         <input type="text" class="form-control" id="banks__bank" required
@@ -39,6 +39,10 @@
                                         <input type="text" class="form-control" id="banks_accountNumber"
                                             placeholder="e.g: 0881-8829-xxxx" required name="banks_accountNumber"
                                             autocomplete="off">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="exampleFormControlFile1">Bank Logo</label>
+                                        <input required type="file" class="form-control-file" id="imagesBanks" name="image">
                                     </div>
                             </div>
                             <div class="modal-footer">
@@ -61,28 +65,32 @@
                         <th>Bank</th>
                         <th>Account Name</th>
                         <th>Account Number</th>
+                        <th>Logo</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     <% for( let i = 0; i < banks.length; i++ ) { %>
-                    <td> <%= i + 1 %> </td>
-                    <td> <%= banks[i].bankName %> </td>
-                    <td> <%= banks[i].accountName %> </td>
-                    <td> <%= banks[i].accountNumber %> </td>
-                    <td>
-                        <button data-id="<%= banks[i].id %>" data-bank="<%= banks[i].bankName %> "
-                            data-accountNumber="<%= banks[i].accountNumber %> "
-                            data-accountName="<%= banks[i].accountName%>" type="button" data-target="#editModal"
-                            data-toggle="modal" class="btn btn-info btn-circle btn-sm" id="btn-update"
-                            onclick="showUpdateAttr(this)"><i class="fas fa-fw fa-edit"></i></button>
+                    <tr>
+                        <td> <%= i + 1 %> </td>
+                        <td> <%= banks[i].bankName %> </td>
+                        <td> <%= banks[i].accountName %> </td>
+                        <td> <%= banks[i].accountNumber %> </td>
+                        <td> <img src="http://localhost:3030/<%- banks[i].logoURL %>" width="100px" alt="" srcset=""> </td>
+                        <td>
+                            <button data-id="<%= banks[i].id %>" data-bank="<%= banks[i].bankName %> "
+                                data-accountNumber="<%= banks[i].accountNumber %> "
+                                data-accountName="<%= banks[i].accountName%>" type="button" data-target="#editModal"
+                                data-toggle="modal" class="btn btn-info btn-circle btn-sm" id="btn-update"
+                                onclick="showUpdateAttr(this)"><i class="fas fa-fw fa-edit"></i></button>
 
-                        <button data-id="<%= banks[i].id %>" data-bank="<%= banks[i].bankName %> "
-                            data-accountNumber="<%= banks[i].accountNumber %> "
-                            data-accountName="<%= banks[i].accountName%>" type="button" data-target="#deleteModal"
-                            data-toggle="modal" class="btn btn-danger btn-sm btn-circle"
-                            onclick="showDeleteAttr(this)"><i class="fas fa-trash"></i></button>
-                    </td>
+                            <button data-id="<%= banks[i].id %>" data-bank="<%= banks[i].bankName %> "
+                                data-accountNumber="<%= banks[i].accountNumber %> "
+                                data-accountName="<%= banks[i].accountName%>" type="button" data-target="#deleteModal"
+                                data-toggle="modal" class="btn btn-danger btn-sm btn-circle"
+                                onclick="showDeleteAttr(this)"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>
                     <% } %>
                 </tbody>
             </table>
@@ -103,7 +111,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form action="/admin/banks/update" method="POST">
+                <form action="/admin/banks/update" method="POST" enctype="multipart/form-data">
                     <div class="form-group">
                         <label for="name">Bank:</label>
                         <input type="text" class="form-control bankName" id="banks__bank" required name="banks_bank"
@@ -118,6 +126,10 @@
                         <label for="name">Bank Account Number</label>
                         <input type="text" class="form-control accountNumber" id="banks_accountNumber"
                             placeholder="e.g: 0881-8829-xxxx" required name="banks_accountNumber" autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleFormControlFile1">Bank Logo</label>
+                        <input type="file" class="form-control-file" id="imagesBanks" name="image">
                     </div>
             </div>
             <div class="modal-footer">

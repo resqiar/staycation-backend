@@ -24,17 +24,18 @@ const _item = new mongoose.Schema({
     },
     isPopular: {
         type: Boolean,
+        default: false,
     },
     imgId: [{
-        type: mongoose.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: "Image",
     }],
     featureId: [{
-        type: mongoose.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: "Feature"
     }],
     activityId: [{
-        type: mongoose.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: "Activity"
     }]
 })

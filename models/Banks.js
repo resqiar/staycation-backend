@@ -13,6 +13,9 @@ const _banks = new mongoose.Schema({
     accountName: {
         type: String,
         required: true,
+    },
+    logoURL : {
+        type: String,
     }
 })
 

@@ -1,6 +1,9 @@
 const Category = require('../models/Category')
 const Banks = require('../models/Banks')
 
+const fs = require('fs-extra');
+const path = require('path');
+
 module.exports = {
     // TODO: RENDER => INDEX
 
@@ -13,15 +16,24 @@ module.exports = {
 
         res.render('admin/category/view_category', { categories })
     },
-    viewItems: (req, res) => {
-        res.render('admin/items/view_items')
+    viewItems: async (req, res) => {
+        try {
+            const category = await Category.find() // => relations to category DB
+            res.render('admin/items/view_items', {category})
+        } catch (e) {
+            console.log(e)
+            res.redirect('/admin/items')
+        }
     },
     viewBanks: async (req, res) => {
-        // GET ALL DATA FROM DB => Bind it to table
+        try {
+            // GET ALL DATA FROM DB => Bind it to table
         const banks = await Banks.find()
-
-
         res.render('admin/banks/view_banks', { banks })
+        } catch (e) {
+            console.log(e);
+            res.redirect('/admin/banks')
+        }
     },
     viewBooking: (req, res) => {
         res.render('admin/booking/view_booking')
@@ -46,7 +58,8 @@ module.exports = {
 
     postBanks: async (req, res) => {
         const input = req.body
-        console.log(input)
+        const logo = req.file
+
         if (input === null) return;
 
         try {
@@ -54,7 +67,8 @@ module.exports = {
             await Banks.create({
                 bankName: input.banks_bank,
                 accountName: input.banks_accountName,
-                accountNumber: input.banks_accountNumber
+                accountNumber: input.banks_accountNumber,
+                logoURL: `images/${logo.filename}`,
             })
             res.redirect('/admin/banks')
         } catch (e) {
@@ -87,17 +101,34 @@ module.exports = {
     updateBanks: async (req, res) => {
         const id = req.body.banks_id
         const input = req.body
+        const logo = req.file 
 
-        if (id === null || input === null) return;
+        if (id === undefined || input === undefined) return;
 
         try {
-            await Banks.findByIdAndUpdate(id, {
-                bankName: input.banks_bank,
-                accountName: input.banks_accountName,
-                accountNumber: input.banks_accountNumber
-            })
+            const _bank = await Banks.findOne({ _id: id })
 
-            res.redirect('/admin/banks')
+            if (logo === undefined) {
+                await Banks.findByIdAndUpdate(id, {
+                    bankName: input.banks_bank,
+                    accountName: input.banks_accountName,
+                    accountNumber: input.banks_accountNumber
+                })
+    
+                res.redirect('/admin/banks')
+            }else {
+                await Banks.findByIdAndUpdate(id, {
+                    bankName: input.banks_bank,
+                    accountName: input.banks_accountName,
+                    accountNumber: input.banks_accountNumber,
+                    logoURL: `images/${logo.filename}`,
+                })
+
+                // TODO: IF USER UPDATING LOGO 
+                await fs.unlink(path.join(`./public/${_bank.logoURL}`))
+
+                res.redirect('/admin/banks')
+            }
         } catch (e) {
             console.log(e)
             res.redirect('/admin/banks')
@@ -109,7 +140,7 @@ module.exports = {
     deleteCategory: async (req, res) => {
         const id = req.body.category__id
 
-        if (id === null) return;
+        if (id === undefined) return;
 
         await Category.findByIdAndDelete(id).then(() => {
             // redirect
@@ -123,10 +154,14 @@ module.exports = {
     deleteBanks: async (req, res) => {
         const id = req.body.banks_id
 
-        if (id === null) return;
-
+        if (id === undefined) return;
+        const _bank = await Banks.findOne({ _id: id })
         try {
             await Banks.findByIdAndDelete(id)
+
+            // DELETE LOGO
+            await fs.unlink(path.join(`./public/${_bank.logoURL}`))
+
             // redirect
             res.status(201).redirect('/admin/banks')
         } catch (e) {

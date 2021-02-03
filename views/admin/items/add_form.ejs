@@ -1,0 +1,52 @@
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Add new items to database</h6>
+    </div>
+    <div class="card-body">
+        <form action="">
+            <div class="form-group">
+                <label for="exampleFormControlInput1">Name:</label>
+                <input type="text" class="form-control" id="nameItems"
+                    placeholder="e.g: Villa Panjaitan" />
+            </div>
+            <div class="form-group">
+                <label for="exampleFormControlInput1">Price:</label>
+                <input type="number" class="form-control" id="priceItems" placeholder="e.g: 125000" />
+            </div>
+            <div class="form-group">
+                <label for="exampleFormControlInput1">City:</label>
+                <input type="text" class="form-control" id="cityItems" placeholder="e.g: Bali" />
+            </div>
+            <div class="form-group">
+                <label for="exampleFormControlInput1">Country:</label>
+                <input type="text" class="form-control" id="countryItems" placeholder="e.g: Indonesia" />
+                <small id="countryHelp" class="form-text text-muted">Default country is Indonesia in case its
+                    null</small>
+            </div>
+            <div class="form-group">
+                <label for="exampleFormControlSelect2">Category:</label>
+                <select class="form-control" id="categoryItems">
+                    <option value="">SELECT CATEGORY</option>
+                    <% for( let i = 0; i < category.length; i++ ) { %>
+                        <option value="<%= category[i].id %> "> <%= category[i].name %>  </option>
+                    <% } %>
+                </select>
+            </div>
+            <form>
+                <div class="form-group">
+                  <label for="exampleFormControlFile1">Input Images</label>
+                  <input type="file" class="form-control-file" id="imagesItems" name="image">
+                </div>
+              </form>
+            <div class="form-group">
+                <label for="descEditor">Description</label>
+                <textarea class="form-control" id="descEditor" rows="3"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary mt-2">Submit</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    CKEDITOR.replace( 'descEditor' );
+</script>
