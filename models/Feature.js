@@ -12,6 +12,10 @@ const _feature = new mongoose.Schema({
     imageURL: {
         type: String,
         required: true,
+    },
+    itemId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Item',
     }
 })
 

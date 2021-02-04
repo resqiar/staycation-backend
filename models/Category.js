@@ -6,9 +6,10 @@ const _category = new mongoose.Schema({
         type: String,
         required: true,
     },
-    itemId : {
+    itemId : [{
         type: ObjectId,
-    }
+        ref: "Item"
+    }]
 })
 
 const Category = mongoose.model('Category', _category)

@@ -18,6 +18,21 @@ const upload = multer({
     }
 }).single("image")
 
+const itemStorage = multer.diskStorage({
+    destination: "public/images/items",
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + path.extname(file.originalname))
+    }
+})
+
+const uploadMultiple = multer({
+    storage: itemStorage,
+    limits: { fileSize: 1000000 },
+    fileFilter: (req, file ,cb) => {
+        checkFileType(file, cb);
+    }
+}).array('item-images', 12)
+
 
 // Check file Type
 const checkFileType = (file, cb) => {
@@ -36,4 +51,4 @@ const checkFileType = (file, cb) => {
     }
 }
 
-module.exports = upload
+module.exports = {upload, uploadMultiple}

@@ -26,6 +26,10 @@ const _item = new mongoose.Schema({
         type: Boolean,
         default: false,
     },
+    categoryId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Category',
+    },
     imgId: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Image",
