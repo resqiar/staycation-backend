@@ -1,5 +1,7 @@
 const Category = require('../models/Category')
 const Banks = require('../models/Banks')
+const Item = require('../models/Item')
+const Image = require('../models/Image')
 
 const fs = require('fs-extra');
 const path = require('path');
@@ -13,14 +15,48 @@ module.exports = {
     viewCategory: async (req, res) => {
         // GET ALL DATA FROM DB => Bind it to table
         const categories = await Category.find()
-
+        
         res.render('admin/category/view_category', { categories })
     },
     viewItems: async (req, res) => {
         try {
             const category = await Category.find() // => relations to category DB
-            res.render('admin/items/view_items', {category})
+            const item = await Item.find().populate({ // ? POPULATE IMAGES
+                path: 'imgId',
+                select: 'id imageURL'
+            }).populate({ // ? POPULATE CATEGORY
+                path: 'categoryId',
+                select: 'id name'
+            })
+
+            res.render('admin/items/view_items', {
+                category, 
+                item,
+                status: 'items'
+            })
         } catch (e) {
+            console.log(e)
+            res.redirect('/admin/items')
+        }
+    },
+    viewImages: async (req, res) => {
+        try {
+            // ? THIS ID IS SEND FROM viewItem METHOD
+            // ? TO GET ACCESS TO SELECTED ITEM ID 
+            const { id } = req.params
+            const category = await Category.find() // => relations to category DB
+            
+            const item = await Item.findOne({ _id: id }).populate({ 
+                path: 'imgId',
+                select: 'id imageURL'
+            })
+
+            res.render('admin/items/view_items', { 
+                id,
+                item,
+                status: 'images'
+            })
+        } catch (error) {
             console.log(e)
             res.redirect('/admin/items')
         }
@@ -78,7 +114,50 @@ module.exports = {
     },
 
     postItems: async (req, res) => {
+        const { nameItems, priceItems, cityItems, countryItems, categoryItems, descItems} = req.body
+        const images = req.files // array of images
+        
+        if ({ nameItems, priceItems, cityItems, countryItems, categoryItems, descItems} === undefined) return;
+        console.log(categoryItems);
+        try {
+            // TODO: find category selected
+            const _category = await Category.findOne({_id: categoryItems})
 
+            // TODO: add new items
+            const newItem = await Item.create({
+                name: nameItems,
+                price: priceItems,
+                city: cityItems,
+                country: countryItems,
+                desc: descItems,
+                categoryId: _category._id,
+            })
+
+            
+            // TODO: Relation => push to other collections (Category)
+            _category.itemId.push({_id: newItem._id})
+            await _category.save()
+
+            // TODO: Save Images
+            if(images !== undefined){
+                for (let i = 0; i < images.length; i++) {
+                    const _image = await Image.create({ 
+                        imageURL : `images/items/${images[i].filename}`,
+                        itemId : newItem._id
+                    }) 
+
+
+                    // TODO: save to items list
+                    newItem.imgId.push({ _id: _image._id })
+                    newItem.save()
+                }
+            }
+
+            res.redirect('/admin/items')
+        } catch (e) {
+            console.log(e);
+            res.redirect('/admin/items')
+        }
     },
 
 

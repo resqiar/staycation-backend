@@ -9,6 +9,7 @@ const {upload, uploadMultiple} = require('../middlewares/Multer')
 router.get('/dashboard', adminController.viewDashboard) 
 router.get('/category', adminController.viewCategory)
 router.get('/items', adminController.viewItems)
+router.get('/items/:id/images', adminController.viewImages) // ? => show items images based on its ID
 router.get('/banks', adminController.viewBanks)
 router.get('/booking', adminController.viewBooking)
 

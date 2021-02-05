@@ -24,11 +24,26 @@
             <div class="container-fluid">
 
                 <!-- Page Heading -->
+                <% if (status === 'items') { %>
                 <h1 class="h3 mb-2 text-gray-800">Items</h1>
                 <p class="mb-4">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Et delectus reiciendis,
                     possimus dolores assumenda excepturi inventore corporis maxime doloremque voluptates, asperiores
                     facere minima perferendis expedita?</p>
-
+                <% } else if (status === 'images') { %>
+                    <div class="row">
+                        <div class="col-md-auto">
+                            <a href="/admin/items" class="btn btn-outline-primary btn-sm"><i class="fas fa-arrow-left"></i> <b>Back</b></a>
+                        </div>
+                        <div class="col-md-auto">
+                            <h1 class="h3 mb-2 text-gray-800"><%= item.name %> list of images</h1>
+                        </div>
+                    </div>
+                
+                <p class="mb-4">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Et delectus reiciendis,
+                    possimus dolores assumenda excepturi inventore corporis maxime doloremque voluptates, asperiores
+                    facere minima perferendis expedita?</p>
+                <% } %>
+                <% if (status === 'items') { %>
                 <ul class="nav nav-tabs" id="myTab" role="tablist">
                     <li class="nav-item">
                         <a class="nav-link active" id="list_items-tab" data-toggle="tab" href="#list_items" role="tab"
@@ -36,7 +51,8 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" id="add_items-tab" data-toggle="tab" href="#add_items" role="tab"
-                            aria-controls="add_items" aria-selected="false"><i class="fas fa-plus-circle"></i> Add New</a>
+                            aria-controls="add_items" aria-selected="false"><i class="fas fa-plus-circle"></i> Add
+                            New</a>
                     </li>
                 </ul>
                 <div class="tab-content" id="myTabContent">
@@ -49,6 +65,40 @@
                         <%- include('add_form.ejs') %>
                     </div>
                 </div>
+                <% } else if (status === 'images') { %>
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="list_items-tab" data-toggle="tab" href="#list-images" role="tab"
+                            aria-controls="list-images" aria-selected="true"><i class="fas fa-images"></i> Images</a>
+                    </li>
+                    <!-- <li class="nav-item">
+                        <a class="nav-link" id="add_items-tab" data-toggle="tab" href="#add-images" role="tab"
+                            aria-controls="add-images" aria-selected="false"><i class="fas fa-plus-circle"></i> Add
+                            New</a>
+                    </li> -->
+                </ul>
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="list-images" role="tabpanel">
+                        <div class="row">
+                            <% for( let i = 0; i < item.imgId.length; i++ ) { %>
+
+                            <div class="col-md-6">
+                                <div class="card shadow m-2">
+                                    <div class="card-body">
+                                        <img src="http://localhost:3030/<%= item.imgId[i].imageURL %>"
+                                            alt="items-images" style="width:100%; display: block">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <% } %>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="add-images" role="tabpanel">
+                        <!-- FORM -->
+                    </div>
+                </div>
+                <% } %>
 
             </div>
             <!-- /.container-fluid -->

@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const { ObjectId } = mongoose.Schema
 
 const _category = new mongoose.Schema({
     name : {
@@ -7,7 +6,7 @@ const _category = new mongoose.Schema({
         required: true,
     },
     itemId : [{
-        type: ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: "Item"
     }]
 })

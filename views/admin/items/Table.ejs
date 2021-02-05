@@ -12,8 +12,35 @@
                         <th>Price</th>
                         <th>City</th>
                         <th>Country</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
+                <tbody>
+                    <% for( let i = 0; i < item.length; i++ ) { %>
+                    <tr>
+                        <td> <%= i + 1 %> </td>
+                        <td><%= item[i].name %> </td>
+                        <td><%= item[i].price %> </td>
+                        <td><%= item[i].city %> </td>
+                        <td><%= item[i].country %> </td>
+                        <td>
+                            <a href="/admin/items/<%= item[i].id %>/images " class="btn btn-primary btn-circle btn-sm"><i class="fas fa-fw fa-images"></i></a>
+
+                            <button type="button" data-toggle="modal" title="Show Details"
+                                class="btn btn-primary btn-sm btn-circle" onclick="showDeleteAttr(this)"><i
+                                    class="fas fa-fw fa-info"></i></button>
+
+                            <button data-id="<%= item[i].id %>" type="button" data-target="#editModal" title="Edit"
+                                data-toggle="modal" class="btn btn-primary btn-circle btn-sm"
+                                onclick="showUpdateAttr(this)"><i class="fas fa-fw fa-edit"></i></button>
+
+                            <button data-id="<%= item[i].id %>" type="button" data-target="#deleteModal" title="Delete"
+                                data-toggle="modal" class="btn btn-danger btn-sm btn-circle"
+                                onclick="showDeleteAttr(this)"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>
+                    <% } %>
+                </tbody>
             </table>
         </div>
     </div>
